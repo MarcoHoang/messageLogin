@@ -23,5 +23,5 @@ COPY --from=builder /app/target/DemoWebSocket-0.0.1-SNAPSHOT.jar app.jar
 # Mở cổng mặc định (sửa nếu bạn dùng cổng khác)
 EXPOSE 8884
 
-# Chạy ứng dụng
+# Chạy ứng dụn
 ENTRYPOINT ["java", "-jar", "app.jar"]
