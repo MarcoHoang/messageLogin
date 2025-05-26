@@ -14,29 +14,28 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         URI uri = request.getURI();
-        String query = uri.getQuery(); // ví dụ: token=abc.def
+        String query = uri.getQuery(); // ví dụ: username=hoang
+
         if (query == null) {
-            return false; // không có token -> từ chối kết nối
+            return false;
         }
 
-        String token = null;
+        String username = null;
         for (String param : query.split("&")) {
-            if (param.startsWith("token=")) {
-                token = param.substring("token=".length());
+            if (param.startsWith("username=")) {
+                username = param.substring("username=".length());
                 break;
             }
         }
 
-        if (token != null && validateToken(token)) {
-            // Nếu token hợp lệ, lưu username hoặc thông tin user vào attributes
-            String username = extractUsername(token);
+        if (username != null && !username.isEmpty()) {
             attributes.put("username", username);
             return true;
         }
 
-        // Token không hợp lệ -> từ chối kết nối
         return false;
     }
+
 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,

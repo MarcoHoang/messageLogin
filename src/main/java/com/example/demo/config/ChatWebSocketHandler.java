@@ -1,5 +1,5 @@
-package com.example.demo.webSocket;
-// ChatWebSocketHandler.java
+package com.example.demo.config;
+
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
-    // lưu tất cả client kết nối vào đây
     private static Set<WebSocketSession> sessions = Collections.synchronizedSet(new HashSet<>());
 
     @Override
@@ -20,11 +19,17 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // Khi nhận tin nhắn từ 1 client, gửi tin nhắn đó cho tất cả client (broadcast)
+        // Lấy username đã lưu trong attributes lúc handshake
+        String sender = (String) session.getAttributes().get("username");
+        String payload = message.getPayload();
+
+        // Bạn có thể tùy chỉnh format message gửi đi
+        String broadcastMsg = sender + ": " + payload;
+
         synchronized (sessions) {
             for (WebSocketSession s : sessions) {
                 if (s.isOpen()) {
-                    s.sendMessage(message);
+                    s.sendMessage(new TextMessage(broadcastMsg));
                 }
             }
         }
@@ -35,4 +40,3 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         sessions.remove(session);
     }
 }
-

@@ -1,4 +1,4 @@
-package com.example.Demo.service;
+package com.example.demo.service;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -33,13 +33,13 @@ public class UserService {
     // Kiểm tra thông tin đăng nhập
     public boolean validateUser(String username, String password) {
         Optional<User> user = userRepository.findByUsername(username);
-
         if (user.isPresent()) {
-            // So sánh mật khẩu đã mã hóa với mật khẩu người dùng nhập vào
+            // So sánh mật khẩu hash trong DB với mật khẩu người dùng đã mã hóa
             return user.get().getPasswordHash().equals(hashPassword(password));
         }
         return false;
     }
+
 
     // Kiểm tra xem người dùng đã tồn tại hay chưa
     public boolean userExists(String username, String email, String phoneNumber) {
@@ -50,10 +50,17 @@ public class UserService {
 
     // Đăng ký người dùng mới
     public void registerUser(User user) {
-        // Mã hóa mật khẩu người dùng trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = hashPassword(user.getPasswordHash());
+        // Lấy mật khẩu gốc từ trường password (tạm, không lưu DB)
+        String rawPassword = user.getPassword(); // mật khẩu gốc người dùng nhập
+
+        // Mã hóa mật khẩu trước khi lưu
+        String encodedPassword = hashPassword(rawPassword);
         user.setPasswordHash(encodedPassword);
 
-        userRepository.save(user);  // Lưu người dùng mới vào cơ sở dữ liệu
+        // Có thể xóa hoặc đặt null trường password (để tránh lưu nhầm)
+        user.setPassword(null);
+
+        userRepository.save(user);
     }
+
 }

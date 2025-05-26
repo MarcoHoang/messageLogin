@@ -1,5 +1,7 @@
-package com.example.Demo.model;
+package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,37 +11,40 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")  // Chỉ định bảng sẽ được ánh xạ
-@Data  // Lombok sẽ tự động tạo các getter, setter, toString, equals, và hashCode
+@Table(name = "users")
+@Data
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  // UUID sẽ tự động sinh ra
-    private UUID id;  // Sử dụng UUID thay vì Integer
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(unique = true, nullable = false)
-    private String username;  // Tên đăng nhập, duy nhất và không rỗng
+    private String username;
 
     @Column(nullable = false)
-    private String passwordHash;  // Mã hóa mật khẩu (password hash)
+    @JsonIgnore  // Không serialize mật khẩu hash ra JSON
+    private String passwordHash;
 
-    private String displayName;  // Tên hiển thị
+    @Transient  // Trường tạm thời, không lưu vào DB
+    @JsonProperty("password")  // Thuộc tính nhận từ JSON là "password"
+    private String password;
 
-    private String avatarUrl;  // Đường dẫn ảnh đại diện
+    private String displayName;
+
+    private String avatarUrl;
 
     @Column(unique = true)
-    private String phoneNumber;  // Số điện thoại, không trùng nhau
+    private String phoneNumber;
 
     @Column(unique = true)
-    private String email;  // Email, không trùng nhau
+    private String email;
 
-    private String status = "active";  // Trạng thái tài khoản mặc định là 'active'
+    private String status = "active";
 
     @CreationTimestamp
-    private LocalDateTime createdAt;  // Thời gian tạo tài khoản, Hibernate sẽ tự động thiết lập
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;  // Thời gian cập nhật tài khoản, Hibernate tự động cập nhật khi có thay đổi
-
-    // Constructor, getter, setter sẽ tự động được Lombok sinh ra nhờ @Data
+    private LocalDateTime updatedAt;
 }
