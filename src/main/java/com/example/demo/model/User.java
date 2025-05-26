@@ -1,16 +1,18 @@
-package com.example.Demo.model;
+package com.example.demo.model;
+
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")  // Chỉ định bảng sẽ được ánh xạ
-@Data  // Lombok sẽ tự động tạo các getter, setter, toString, equals, và hashCode
+
 public class User {
 
     @Id
@@ -41,5 +43,96 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;  // Thời gian cập nhật tài khoản, Hibernate tự động cập nhật khi có thay đổi
 
-    // Constructor, getter, setter sẽ tự động được Lombok sinh ra nhờ @Data
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public User(UUID id, String username, String passwordHash, String displayName, String avatarUrl, String phoneNumber, String email, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.displayName = displayName;
+        this.avatarUrl = avatarUrl;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }
