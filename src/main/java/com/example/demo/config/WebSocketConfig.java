@@ -1,4 +1,4 @@
-package com.example.demo.webSocket;
+package com.example.demo.config;
 // WebSocketConfig.java
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

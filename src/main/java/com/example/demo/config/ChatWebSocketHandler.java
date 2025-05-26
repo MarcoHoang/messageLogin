@@ -1,4 +1,4 @@
-package com.example.demo.webSocket;
+package com.example.demo.config;
 // ChatWebSocketHandler.java
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
